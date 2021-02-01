@@ -23,6 +23,12 @@ class MainActivity : AppCompatActivity() {
         return listOf(
             Pkm(1, "Bulbasaur"),
             Pkm(2, "Ivysaur"),
-            Pkm(3, "Venusaur"))
+            Pkm(3, "Venusaur"),
+            Pkm(4, "Charmander"),
+            Pkm(5, "Charmeleon"),
+            Pkm(6, "Charizard"),
+            Pkm(7, "Squirtle"),
+            Pkm(8, "Wartortle"),
+            Pkm(9, "Blastoise"))
     }
 }

@@ -52,4 +52,14 @@ dependencies {
 
     implementation "androidx.recyclerview:recyclerview:1.1.0"
     implementation "androidx.cardview:cardview:1.0.0"
+
+    //JSON in Kotlin
+    implementation 'com.beust:klaxon:5.0.1'
+
+    //Coroutine - Get URL
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
+
+    //Load images from server
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 }

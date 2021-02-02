@@ -10,6 +10,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
+import com.beust.klaxon.JsonObject
+import com.bumptech.glide.Glide
 import com.saidel.bookdex.model.Pkm
 import com.saidel.bookdex.utils.Constants
 
@@ -41,7 +43,11 @@ class PokemonListAdapter(private val pkms: List<Pkm>, private val context: Conte
 
             pkmNumber.text = pkmItem.number.toString()
             pkmName.text = pkmItem.name
-            pkmImage.setImageResource(context.resources.getIdentifier("drawable/pkm_" + pkmItem.number, null, context.getPackageName()))
+            //pkmImage.setImageResource(context.resources.getIdentifier("drawable/pkm_" + pkmItem.number, null, context.getPackageName()))
+            var url_default_pkm_image = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+pkmItem.number+".png"
+            Glide.with(context)
+                    .load(url_default_pkm_image)
+                    .into(pkmImage)
         }
     }
 

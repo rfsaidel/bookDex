@@ -2,5 +2,6 @@ package com.saidel.bookdex.model
 
 class Pkm(
     val number: Int,
-    val name: String
+    val name: String,
+    val url: String
 )

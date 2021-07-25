@@ -1,4 +1,4 @@
-package com.saidel.bookdex
+package com.saidel.bookdex.presentation.pkmList
 
 import android.content.Context
 import android.content.Intent
@@ -10,17 +10,18 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.Adapter
-import com.beust.klaxon.JsonObject
 import com.bumptech.glide.Glide
+import com.saidel.bookdex.R
 import com.saidel.bookdex.model.Pkm
+import com.saidel.bookdex.presentation.pkmDetails.PkmDetailsActivity
 import com.saidel.bookdex.utils.Constants
+import com.saidel.bookdex.utils.Utils
 
 class PokemonListAdapter(private val pkms: List<Pkm>, private val context: Context) : Adapter<PokemonListAdapter.ViewHolder>(),
-    View.OnClickListener {
+        View.OnClickListener {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.pkm_item, parent, false)
-        view.findViewById<TextView>(R.id.pkm_name)
         view.setOnClickListener(this)
         return ViewHolder(view)
     }
@@ -31,11 +32,12 @@ class PokemonListAdapter(private val pkms: List<Pkm>, private val context: Conte
             it.bindView(pkmItem, context)
         }
     }
+
     override fun getItemCount(): Int {
         return pkms.size
     }
 
-    class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindView(pkmItem: Pkm, context: Context) {
             val pkmNumber = itemView.findViewById<TextView>(R.id.pkm_number)
             val pkmName = itemView.findViewById<TextView>(R.id.pkm_name)
@@ -43,20 +45,19 @@ class PokemonListAdapter(private val pkms: List<Pkm>, private val context: Conte
 
             pkmNumber.text = pkmItem.number.toString()
             pkmName.text = pkmItem.name
-            //pkmImage.setImageResource(context.resources.getIdentifier("drawable/pkm_" + pkmItem.number, null, context.getPackageName()))
-            var url_default_pkm_image = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+pkmItem.number+".png"
             Glide.with(context)
-                    .load(url_default_pkm_image)
+                    .load(Utils.generateImageURL(pkmItem.number.toString()))
+                    .placeholder(R.drawable.img_placeholder_pokebola)
                     .into(pkmImage)
         }
     }
 
     override fun onClick(v: View?) {
-        Toast.makeText(context,(v?.findViewById<TextView>(R.id.pkm_name))?.text, Toast.LENGTH_SHORT).show()
-        val open_details = Intent(context, DetailsPkm::class.java)
-        open_details.putExtra(Constants.PKM_NUMBER, (v?.findViewById<TextView>(R.id.pkm_number))?.text)
-        open_details.putExtra(Constants.PKM_NAME, (v?.findViewById<TextView>(R.id.pkm_name))?.text)
-        context.startActivity(open_details)
+        Toast.makeText(context, (v?.findViewById<TextView>(R.id.pkm_name))?.text, Toast.LENGTH_SHORT).show()
+        val openDetails = Intent(context, PkmDetailsActivity::class.java)
+        openDetails.putExtra(Constants.PKM_NUMBER, (v?.findViewById<TextView>(R.id.pkm_number))?.text)
+        openDetails.putExtra(Constants.PKM_NAME, (v?.findViewById<TextView>(R.id.pkm_name))?.text)
+        context.startActivity(openDetails)
     }
 
 }

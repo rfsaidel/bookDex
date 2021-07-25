@@ -1,9 +1,7 @@
-package com.saidel.bookdex
+package com.saidel.bookdex.presentation.pkmList
 
-import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
 import com.beust.klaxon.Klaxon
@@ -16,13 +14,13 @@ import kotlinx.coroutines.withContext
 import java.io.StringReader
 import java.net.URL
 
-class MainActivity : AppCompatActivity() {
+class PkmListViewModel : ViewModel() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    val pkmList: MutableLiveData<List<Pkm>> by lazy {
+        MutableLiveData<List<Pkm>>()
+    }
 
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        
+    fun fetchPkmListData() {
         val klaxon = Klaxon()
         GlobalScope.launch {
             val apiResponse = URL(Constants.API_URL_PKM_LIST).readText()
@@ -38,15 +36,11 @@ class MainActivity : AppCompatActivity() {
         val pkm_list_json = parsed["results"]
         var size = (pkm_list_json as JsonArray<*>).size
         for (i in 0 until size) {
-            var pkm_item = Pkm(i+1,
-                            ((pkm_list_json as JsonArray<*>).get(i) as JsonObject).get("name").toString().capitalize(),
-                            ((pkm_list_json as JsonArray<*>).get(i) as JsonObject).get("url").toString())
+            var pkm_item = Pkm(i + 1,
+                    ((pkm_list_json as JsonArray<*>).get(i) as JsonObject).get("name").toString().capitalize(),
+                    ((pkm_list_json as JsonArray<*>).get(i) as JsonObject).get("url").toString())
             pkm_list.add(pkm_item)
         }
-
-        var pkmsRecyclerView = this.findViewById<RecyclerView>(R.id.pkm_list)
-        pkmsRecyclerView.adapter = PokemonListAdapter(pkm_list, this)
-        val layoutManager = StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL)
-        pkmsRecyclerView.layoutManager = layoutManager
+        pkmList.value = pkm_list
     }
 }

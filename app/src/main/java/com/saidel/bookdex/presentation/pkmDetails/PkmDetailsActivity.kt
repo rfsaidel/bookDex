@@ -1,11 +1,13 @@
 package com.saidel.bookdex.presentation.pkmDetails
 
+import android.net.Uri
 import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageView
 import com.bumptech.glide.Glide
+import com.github.twocoffeesoneteam.glidetovectoryou.GlideToVectorYou
 import com.saidel.bookdex.R
 import com.saidel.bookdex.model.PkmDetails
 import com.saidel.bookdex.utils.Constants
@@ -25,9 +27,12 @@ class PkmDetailsActivity : AppCompatActivity() {
         setElements()
         setObserver()
 
-        pkmDetailsViewModel.fetchPkmDetailsData(PkmDetails(
+        pkmDetailsViewModel.fetchPkmDetailsData(
+            PkmDetails(
                 number = intent.getStringExtra(Constants.PKM_NUMBER) ?: "",
-                name = intent.getStringExtra(Constants.PKM_NAME) ?: ""))
+                name = intent.getStringExtra(Constants.PKM_NAME) ?: ""
+            )
+        )
     }
 
     private fun setElements() {
@@ -37,10 +42,21 @@ class PkmDetailsActivity : AppCompatActivity() {
 
     private fun setObserver() {
         pkmDetailsViewModel.pkmDetails.observe(this) { pkm ->
-            Glide.with(this)
+            if (pkm.image_url.contains(".svg")) {
+                GlideToVectorYou
+                    .init()
+                    .with(this)
+                    .setPlaceHolder(
+                        R.drawable.ic_img_placeholder_pokebola,
+                        R.drawable.ic_img_placeholder_pokebola
+                    )
+                    .load(Uri.parse(pkm.image_url), pkmImage)
+            } else {
+                Glide.with(this)
                     .load(pkm.image_url)
-                    .placeholder(R.drawable.img_placeholder_pokebola)
+                    .placeholder(R.drawable.ic_img_placeholder_pokebola)
                     .into(pkmImage)
+            }
             pkmDetails.text = pkm.name
         }
     }

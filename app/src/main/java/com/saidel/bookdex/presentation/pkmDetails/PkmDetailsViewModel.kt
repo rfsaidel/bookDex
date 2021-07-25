@@ -42,16 +42,25 @@ class PkmDetailsViewModel : ViewModel() {
     private fun processData(parsed: JsonObject) {
         var best_image_rul = ""
         try {
-            best_image_rul = (((parsed["sprites"] as JsonObject)["other"] as JsonObject)["official-artwork"] as JsonObject)["front_default"] as String
+            best_image_rul =
+                (((parsed["sprites"] as JsonObject)["other"] as JsonObject)["dream_world"] as JsonObject)["front_default"] as String
         } catch (exception: Exception) {
-            best_image_rul = (parsed["sprites"] as JsonObject)["front_default"] as String
+            try {
+                best_image_rul =
+                    (((parsed["sprites"] as JsonObject)["other"] as JsonObject)["official-artwork"] as JsonObject)["front_default"] as String
+            } catch (exception: Exception) {
+                best_image_rul = (parsed["sprites"] as JsonObject)["front_default"] as String
+            }
         }
+
+
         pkm.image_url = best_image_rul
         var types = (parsed["types"] as JsonArray<*>)
         var types_size = types.size
 
         for (i in 0 until types_size) {
-            pkm.type.toMutableList().add(((types[i] as JsonObject)["type"] as JsonObject)["name"] as String)
+            pkm.type.toMutableList()
+                .add(((types[i] as JsonObject)["type"] as JsonObject)["name"] as String)
         }
         pkm.weight = ((parsed["weight"].toString().toDouble() / 10).toString()) //kg
         pkm.height = ((parsed["height"].toString().toDouble() / 10).toString()) //m

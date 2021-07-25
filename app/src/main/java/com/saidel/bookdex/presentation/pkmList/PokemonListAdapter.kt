@@ -47,7 +47,7 @@ class PokemonListAdapter(private val pkms: List<Pkm>, private val context: Conte
             pkmName.text = pkmItem.name
             Glide.with(context)
                     .load(Utils.generateImageURL(pkmItem.number.toString()))
-                    .placeholder(R.drawable.img_placeholder_pokebola)
+                    .placeholder(R.drawable.ic_img_placeholder_pokebola)
                     .into(pkmImage)
         }
     }

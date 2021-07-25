@@ -18,6 +18,8 @@ allprojects {
     repositories {
         google()
         jcenter()
+        //Repository for 'GlideToVectorYou'
+        maven { url 'https://jitpack.io' }
     }
 }
 

@@ -21,6 +21,7 @@ class PkmListActivity : AppCompatActivity() {
 
         setElements()
         setObserver()
+        pkmListViewModel.postData(this)
         pkmListViewModel.fetchPkmListData()
     }
 
